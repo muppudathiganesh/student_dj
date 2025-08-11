@@ -1,29 +1,33 @@
-from django.contrib.auth.models import User
-from sms_app.models import Student, Teacher, Course, Enrollment, Grade
+from datetime import date
+from library_app.models import Book, Member, BorrowRecord, Reservation  # replace library_app with your app name
 
-# Create a teacher user and teacher profile
-teacher_user = User.objects.create_user(username='teacher1', email='teacher1@example.com', password='testpass123')
-teacher = Teacher.objects.create(user=teacher_user, department='Mathematics')
+# Create sample books
+books = [
+    Book.objects.create(isbn='9780140449136', title='The Odyssey', author='Homer', published_year=-800, copies_available=5),
+    Book.objects.create(isbn='9780439136365', title='Harry Potter and the Prisoner of Azkaban', author='J.K. Rowling', published_year=1999, copies_available=3),
+    Book.objects.create(isbn='9780553293357', title='Dune', author='Frank Herbert', published_year=1965, copies_available=4),
+    Book.objects.create(isbn='9780316769488', title='The Catcher in the Rye', author='J.D. Salinger', published_year=1951, copies_available=2),
+    Book.objects.create(isbn='9780061120084', title='To Kill a Mockingbird', author='Harper Lee', published_year=1960, copies_available=6),
+]
 
-# Create a few courses
-course_math = Course.objects.create(name='Algebra I', code='MATH101', teacher=teacher)
-course_physics = Course.objects.create(name='Physics I', code='PHYS101', teacher=teacher)
+# Create sample members
+members = [
+    Member.objects.create(member_id='M001', name='Alice Johnson', email='alice@example.com', phone='555-1234', registration_date=date(2024, 1, 15)),
+    Member.objects.create(member_id='M002', name='Bob Smith', email='bob@example.com', phone='555-5678', registration_date=date(2024, 2, 10)),
+    Member.objects.create(member_id='M003', name='Carol Lee', email='carol@example.com', phone='555-8765', registration_date=date(2024, 3, 22)),
+]
 
-# Create student users and profiles
-student_user1 = User.objects.create_user(username='student1', email='student1@example.com', password='testpass123')
-student1 = Student.objects.create(user=student_user1, roll_number='S1001', department='Mathematics')
+# Create sample borrowing records
+borrow_records = [
+    BorrowRecord.objects.create(borrow_id='B001', member=members[0], book=books[0], borrow_date=date(2024, 7, 1), due_date=date(2024, 7, 15), return_date=date(2024, 7, 14), fine_amount=0),
+    BorrowRecord.objects.create(borrow_id='B002', member=members[1], book=books[1], borrow_date=date(2024, 7, 3), due_date=date(2024, 7, 17), return_date=date(2024, 7, 20), fine_amount=3),
+    BorrowRecord.objects.create(borrow_id='B003', member=members[2], book=books[3], borrow_date=date(2024, 7, 5), due_date=date(2024, 7, 19), return_date=None, fine_amount=0),
+]
 
-student_user2 = User.objects.create_user(username='student2', email='student2@example.com', password='testpass123')
-student2 = Student.objects.create(user=student_user2, roll_number='S1002', department='Physics')
+# Create sample reservations
+reservations = [
+    Reservation.objects.create(reservation_id='R001', member=members[1], book=books[2], reservation_date=date(2024, 7, 10), status='Pending'),
+    Reservation.objects.create(reservation_id='R002', member=members[0], book=books[4], reservation_date=date(2024, 7, 12), status='Completed'),
+]
 
-# Enroll students in courses
-enrollment1 = Enrollment.objects.create(student=student1, course=course_math)
-enrollment2 = Enrollment.objects.create(student=student2, course=course_physics)
-
-# Add grades for enrollments
-Grade.objects.create(enrollment=enrollment1, assignment_name='Homework 1', score=85, max_score=100)
-Grade.objects.create(enrollment=enrollment1, assignment_name='Quiz 1', score=90, max_score=100)
-Grade.objects.create(enrollment=enrollment2, assignment_name='Homework 1', score=88, max_score=100)
-Grade.objects.create(enrollment=enrollment2, assignment_name='Quiz 1', score=92, max_score=100)
-
-print("Sample data created successfully!")
+print("Sample data created successfully.")
