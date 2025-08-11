@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+{% if enrollments %}
+    <h3>Your Enrollments</h3>
+    <ul>
+        {% for enrollment in enrollments %}
+            <li>
+                {{ enrollment.course.name }} ({{ enrollment.course.code }}) -
+                <a href="{% url 'attendance_calendar' enrollment.id %}">Attendance</a> |
+                <a href="{% url 'gradebook' enrollment.id %}">Grades</a> |
+                <a href="{% url 'export_pdf' %}?enrollment_id={{ enrollment.id }}">Download PDF</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'enroll_course' %}">Enroll in a new course</a>
+
+{% elif courses %}
+    <h3>Your Courses</h3>
+    <ul>
+        {% for course in courses %}
+            <li>
+                {{ course.name }} ({{ course.code }})
+                <a href="{% url 'export_csv' %}?course_id={{ course.id }}">Export Enrollments CSV</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'upload_assignment' %}">Upload Assignment</a>
+
+{% else %}
+    <p>No enrollments or courses found.</p>
+{% endif %}
+{% endblock %}
